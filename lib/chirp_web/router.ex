@@ -77,6 +77,7 @@ defmodule ChirpWeb.Router do
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
 
       live "/links", LinkLive.Index
+      live "/links/new", LinkLive.New
     end
   end
 

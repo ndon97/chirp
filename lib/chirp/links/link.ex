@@ -5,13 +5,15 @@ defmodule Chirp.Links.Link do
   schema "links" do
     field :url, :string
 
+    belongs_to :user, Chirp.Users.User
+
     timestamps(type: :utc_datetime)
   end
 
   @doc false
-  def changeset(link, attrs) do
+  def changeset(link, attrs \\ %{}) do
     link
-    |> cast(attrs, [:url])
-    |> validate_required([:url])
+    |> cast(attrs, [:url, :user_id])
+    |> validate_required([:url, :user_id])
   end
 end

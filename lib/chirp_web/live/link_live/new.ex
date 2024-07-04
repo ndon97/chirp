@@ -1,4 +1,4 @@
-defmodule ChirpWeb.LinkLive.Index do
+defmodule ChirpWeb.LinkLive.New do
   use ChirpWeb, :live_view
 
   alias Chirp.Links
@@ -6,17 +6,14 @@ defmodule ChirpWeb.LinkLive.Index do
 
   def mount(_params, _session, socket) do
     changeset = Links.Link.changeset(%Links.Link{})
-    user_id = socket.assigns.current_user.id
 
     socket =
       socket
-      |> assign(:links, Links.list_links(user_id))
       |> assign(:form, to_form(changeset))
 
     {:ok, socket}
   end
 
-  @spec handle_event(<<_::48>>, map(), map()) :: {:noreply, map()}
   def handle_event("submit", %{"link" => link_params}, socket) do
     user_id = socket.assigns.current_user.id
 
@@ -25,10 +22,11 @@ defmodule ChirpWeb.LinkLive.Index do
       |> Map.put("user_id", user_id)
 
     case Links.create_link(params) do
-      {:ok, link} ->
+      {:ok, _link} ->
         socket =
           socket
-          |> assign(:links, [link | socket.assigns.links])
+          |> put_flash(:info, "Link created successfully")
+          |> push_navigate(to: ~p"/links")
 
         {:noreply, socket}
 
